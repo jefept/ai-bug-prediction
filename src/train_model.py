@@ -8,7 +8,7 @@ from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 
 
-data = pd.read_csv("data/software_metrics.csv")
+data = pd.read_csv("data/SoftwareDefectDataset.csv")
 
 
 X = data.drop("bugs", axis=1)
