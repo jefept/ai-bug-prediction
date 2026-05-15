@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
-
+from sklearn.model_selection import cross_val_score
 from sklearn.metrics import accuracy_score
 
 
@@ -32,10 +32,10 @@ models = {
 
 for name, model in models.items():
 
-    model.fit(X_train, y_train)
+    scores = cross_val_score(model, X, y, cv=5)
 
-    predictions = model.predict(X_test)
-
-    accuracy = accuracy_score(y_test, predictions)
+    print(name)
+    print("Accuracy mean:", scores.mean())
+    print("Std:", scores.std())
 
     print(name, "accuracy:", accuracy)
