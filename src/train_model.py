@@ -1,25 +1,29 @@
 import pandas as pd
+import numpy as np
 
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
-from sklearn.model_selection import cross_val_score
-from sklearn.metrics import accuracy_score
 
+from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
 
-predictions = model.predict(X_test)
 
-print(classification_report(y_test, predictions))
+# garantir reprodutibilidade
+np.random.seed(42)
 
+
+# carregar dataset
 data = pd.read_csv("data/SoftwareDefectDataset.csv")
 
 
-X = data.drop("bugs", axis=1)
-y = data["bugs"]
+# separar features e target
+X = data.drop("DEFECT_LABEL", axis=1)
+y = data["DEFECT_LABEL"]
 
 
+# train-test split
 X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
@@ -28,6 +32,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 
+# modelos que vamos testar
 models = {
     "Logistic Regression": LogisticRegression(max_iter=1000),
     "Random Forest": RandomForestClassifier(),
@@ -35,12 +40,17 @@ models = {
 }
 
 
+# treinar e avaliar modelos
 for name, model in models.items():
 
-    scores = cross_val_score(model, X, y, cv=5)
+    model.fit(X_train, y_train)
 
+    predictions = model.predict(X_test)
+
+    accuracy = accuracy_score(y_test, predictions)
+
+    print("-------------")
     print(name)
-    print("Accuracy mean:", scores.mean())
-    print("Std:", scores.std())
+    print("Accuracy:", accuracy)
 
-    print(name, "accuracy:", accuracy)
+    print(classification_report(y_test, predictions))
