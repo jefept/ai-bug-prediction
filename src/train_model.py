@@ -7,6 +7,11 @@ from sklearn.svm import SVC
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import accuracy_score
 
+from sklearn.metrics import classification_report
+
+predictions = model.predict(X_test)
+
+print(classification_report(y_test, predictions))
 
 data = pd.read_csv("data/SoftwareDefectDataset.csv")
 
